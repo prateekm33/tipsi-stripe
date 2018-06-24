@@ -128,6 +128,13 @@ export default class PaymentCardTextField extends Component {
     }
   };
 
+  setRef = el => {
+    this.field = el;
+    if (this.props.inputRef && typeof this.props.inputRef === "function") {
+      this.props.inputRef(el);
+    }
+  };
+
   render() {
     const {
       style,
@@ -162,7 +169,7 @@ export default class PaymentCardTextField extends Component {
         rejectResponderTermination
       >
         <NativePaymentCardTextField
-          ref={field => (this.field = field)}
+          ref={this.setRef}
           style={[styles.field, fieldStyles]}
           borderColor={borderColor}
           borderWidth={borderWidth}
