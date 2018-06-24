@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import {
   requireNativeComponent,
   findNodeHandle,
   StyleSheet,
   View,
   TouchableWithoutFeedback,
-  ViewPropTypes,
-} from 'react-native'
-import PropTypes from 'prop-types'
-import StyleSheetPropType from 'react-native/Libraries/StyleSheet/StyleSheetPropType'
-import ViewStylePropTypes from 'react-native/Libraries/Components/View/ViewStylePropTypes'
-import TextInputState from 'react-native/Libraries/Components/TextInput/TextInputState'
+  ViewPropTypes
+} from "react-native";
+import PropTypes from "prop-types";
+import StyleSheetPropType from "react-native/Libraries/StyleSheet/StyleSheetPropType";
+import ViewStylePropTypes from "react-native/Libraries/Components/View/ViewStylePropTypes";
+import TextInputState from "react-native/Libraries/Components/TextInput/TextInputState";
 
 const FieldStylePropType = {
   ...ViewStylePropTypes,
-  color: PropTypes.string,
-}
+  color: PropTypes.string
+};
 
-const nativeComponents = {}
+const nativeComponents = {};
 
 function getNativeComponent(name) {
   if (nativeComponents[name]) {
-    return nativeComponents[name]
+    return nativeComponents[name];
   }
 
   nativeComponents[name] = requireNativeComponent(name, PaymentCardTextField, {
@@ -37,14 +37,14 @@ function getNativeComponent(name) {
       enabled: true,
       params: true,
       keyboardAppearance: true,
-      onChange: true,
-    },
-  })
+      onChange: true
+    }
+  });
 
-  return nativeComponents[name]
+  return nativeComponents[name];
 }
 
-const NativePaymentCardTextField = getNativeComponent('TPSCardField')
+const NativePaymentCardTextField = getNativeComponent("TPSCardField");
 
 export default class PaymentCardTextField extends Component {
   static propTypes = {
@@ -65,65 +65,68 @@ export default class PaymentCardTextField extends Component {
      * Determines the color of the keyboard.
      * @platform ios
      */
-    keyboardAppearance: PropTypes.oneOf(['default', 'light', 'dark']),
+    keyboardAppearance: PropTypes.oneOf(["default", "light", "dark"]),
 
     onChange: PropTypes.func,
-    onValueChange: PropTypes.func,
-  }
+    onValueChange: PropTypes.func
+  };
 
   static defaultProps = {
-    ...View.defaultProps,
-  }
+    ...View.defaultProps
+  };
 
-  valid = false // eslint-disable-line react/sort-comp
+  valid = false; // eslint-disable-line react/sort-comp
   params = {
-    number: '',
+    number: "",
     expMonth: 0,
     expYear: 0,
-    cvc: '',
-  }
+    cvc: ""
+  };
 
   componentWillUnmount() {
     if (this.isFocused()) {
-      this.blur()
+      this.blur();
     }
   }
 
-  isFocused = () => (
-    TextInputState.currentlyFocusedField() === findNodeHandle(this)
-  )
+  isFocused = () =>
+    TextInputState.currentlyFocusedField() === findNodeHandle(this);
 
   focus = () => {
-    TextInputState.focusTextInput(findNodeHandle(this))
-  }
+    TextInputState.focusTextInput(findNodeHandle(this));
+  };
 
   blur = () => {
-    TextInputState.blurTextInput(findNodeHandle(this))
-  }
+    TextInputState.blurTextInput(findNodeHandle(this));
+  };
 
-  setParams = (params) => {
-    this.field.setNativeProps({ params })
-  }
+  clear = () => {
+    TextInputState.clearTextInput(findNodeHandle(this));
+  };
+
+  setParams = params => {
+    this.field.setNativeProps({ params });
+  };
 
   handlePress = () => {
-    this.focus()
-  }
+    this.focus();
+  };
 
-  handleChange = (event) => {
-    const { onChange, onParamsChange } = this.props
-    const { nativeEvent } = event
+  handleChange = event => {
+    const { onChange, onParamsChange } = this.props;
+    const { nativeEvent } = event;
 
-    this.valid = nativeEvent.valid
-    this.params = nativeEvent.params
+    this.valid = nativeEvent.valid;
+    this.params = nativeEvent.params;
 
     if (onChange) {
-      onChange(event)
+      onChange(event);
     }
 
     if (onParamsChange) {
-      onParamsChange(nativeEvent.valid, nativeEvent.params)
+      onParamsChange(nativeEvent.valid, nativeEvent.params);
     }
-  }
+  };
 
   render() {
     const {
@@ -137,7 +140,7 @@ export default class PaymentCardTextField extends Component {
       cvcPlaceholder,
       keyboardAppearance,
       ...rest
-    } = this.props
+    } = this.props;
     const {
       borderColor,
       borderWidth,
@@ -148,7 +151,7 @@ export default class PaymentCardTextField extends Component {
       fontSize,
       color,
       ...fieldStyles
-    } = StyleSheet.flatten(style)
+    } = StyleSheet.flatten(style);
     return (
       <TouchableWithoutFeedback
         onPress={this.handlePress}
@@ -156,9 +159,10 @@ export default class PaymentCardTextField extends Component {
         accessible={rest.accessible}
         accessibilityLabel={rest.accessibilityLabel}
         accessibilityTraits={rest.accessibilityTraits}
-        rejectResponderTermination>
+        rejectResponderTermination
+      >
         <NativePaymentCardTextField
-          ref={field => this.field = field}
+          ref={field => (this.field = field)}
           style={[styles.field, fieldStyles]}
           borderColor={borderColor}
           borderWidth={borderWidth}
@@ -179,7 +183,7 @@ export default class PaymentCardTextField extends Component {
           onChange={this.handleChange}
         />
       </TouchableWithoutFeedback>
-    )
+    );
   }
 }
 
@@ -190,6 +194,6 @@ const styles = StyleSheet.create({
     // surrounding view to ensure it gets rendered.
     height: 44,
     // Set default background color to prevent transparent background
-    backgroundColor: '#ffffff',
-  },
-})
+    backgroundColor: "#ffffff"
+  }
+});
