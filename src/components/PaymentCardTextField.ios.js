@@ -76,6 +76,12 @@ export default class PaymentCardTextField extends Component {
   };
 
   valid = false; // eslint-disable-line react/sort-comp
+  _initialParams = {
+    number: "",
+    expMonth: 0,
+    expYear: 0,
+    cvc: ""
+  };
   params = {
     number: "",
     expMonth: 0,
