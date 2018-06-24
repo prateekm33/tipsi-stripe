@@ -83,6 +83,12 @@ export default class PaymentCardTextField extends Component {
     cvc: ""
   };
 
+  componentDidMount() {
+    if (this.props.onMount && typeof this.props.onMount === "function") {
+      this.props.onMount(this);
+    }
+  }
+
   componentWillUnmount() {
     if (this.isFocused()) {
       this.blur();
@@ -101,7 +107,7 @@ export default class PaymentCardTextField extends Component {
   };
 
   clear = () => {
-    TextInputState.clearTextInput(findNodeHandle(this));
+    this.setParams(this._initialParams);
   };
 
   setParams = params => {
@@ -130,9 +136,6 @@ export default class PaymentCardTextField extends Component {
 
   setRef = el => {
     this.field = el;
-    if (this.props.inputRef && typeof this.props.inputRef === "function") {
-      this.props.inputRef(el);
-    }
   };
 
   render() {
